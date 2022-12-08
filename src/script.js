@@ -173,25 +173,6 @@ console.log(stations);
 const stationsParticles = stations.map(x => x.particles)
 console.log(stationsParticles);
 
-
-// Correspondances
-// const lineMaterial = new THREE.LineBasicMaterial({
-// 	color: 0xCD3EFF
-// });
-
-// const linePoints = [];
-
-// for(const station of stationsParticles)
-// {
-//     linePoints.push(station.position)
-// }
-
-// const lineGeometry = new THREE.BufferGeometry().setFromPoints( linePoints );
-
-// const line = new THREE.Line( lineGeometry, lineMaterial );
-// scene.add( line );
-
-
 class Correspondance{
 
     constructor(start, end)
@@ -265,12 +246,8 @@ const defCha = new Correspondance(defense, chatelet)
 const defNat = new Correspondance(defense, nation)
 const ChaNat = new Correspondance(chatelet, nation)
 
-
-
 const correspondances = [gdnGde, gdnCha, gdnMtp, gdnRep, StlCha, StlGdl, StlFra, StlRep, StlMtp, gdlCha, gdlDef, gdlNat, gdlFra, monCha, monGde, monNat, gdeCha, gdeRep, repCha, FraCha, defCha, defNat, ChaNat]
 const correspMeshes = correspondances.map(x => x.lineMesh)
-
-
 
 // Group everything
 const group = new THREE.Group();
@@ -286,29 +263,35 @@ for(const corresp of correspMeshes)
 scene.add( group );
 
 
-
 let targetQuaternion;
+let card = document.getElementById("card");
+
 
 window.addEventListener('click', () =>
 {
-    if(currentIntersect)
+    if(currentIntersect) // if we clicked on a station
     {
         targetQuaternion = currentIntersect.object.quaternion.clone();
 
-        // Lower opacity of other particles
-        stationsParticles.forEach(particle => {
+        stationsParticles.forEach((particle, index) => {
+            // Lower opacity of other particles
             if(particle.name !== currentIntersect.object.name)
             {
                 particle.material.transparent = true
                 particle.material.opacity = 0.025
-                // particle.material.opacity = lerp(particle.material.opacity, 0, 0.1)
-                // mesh.material.opacity = 0;
-                // gsap.to(particle.material, { duration: 1, delay: 0.5, opacity: 0.5 });
             }
+            // On the selected station
             else
             {
                 currentIntersect.object.material.opacity = 1
-                // console.log(stations[particle.index].card);
+                // show selected card
+                if(card.firstChild){
+                    card.removeChild(card.firstChild);  
+                }
+                let img = document.createElement("img");
+                console.log(img);
+                img.src = stations[index].card;
+                card.appendChild(img);
             }
         })
 
@@ -317,24 +300,25 @@ window.addEventListener('click', () =>
             corresp.material.opacity = 0.3
         })
 
-
-        // camera.lookAt(currentIntersect.object.position)
         gsap.to(camera.position, { duration: 1, delay: 0.5, x: currentIntersect.object.position.x + 4, y: currentIntersect.object.position.y, z: currentIntersect.object.position.z + 8 })
     }
-    else
+    else // if we clicked on the background
     {
+        // camera comes back to its original position
         targetQuaternion = camera.quaternion.clone();
-        // camera.lookAt(0, 0, 0)
         gsap.to(camera.position, { duration: 1, delay: 0.5, x: 0, y: 0, z: 18 })
         stationsParticles.forEach(particle => {
                 particle.material.transparent = false
                 particle.material.opacity = 1
-                // particle.material.visible = true
         })
+        // all stations are visible again
         correspMeshes.forEach(corresp => {
             corresp.material.transparent = false
             corresp.material.opacity = 1
         })
+
+        // remove previous card
+        card.removeChild(card.firstChild);
     }
 })
 
