@@ -157,16 +157,16 @@ class Station{
 
 }
 
-const gareDuNord = new Station('Gare du Nord', 10, 3, 0, 0xFF7425, 3, '/cards/0.png')
-const saintLazare = new Station('Saint-Lazare', 7, -6, 0, 0xFFAB2E, 2.8, '/cards/1.png')
-const gareDeLyon = new Station('Gare de Lyon', -5, 4, 0, 0xFFCF26, 2.6, '/cards/2.png')
-const montparnasse = new Station('Montparnasse', 3, 7, 0, 0xCD3EFF, 2.4, '/cards/3.png')
-const gareDeLest = new Station('Gare de l\'Est', -6, -9, 0, 0x7A4FF5, 2.2, '/cards/4.png')
-const republique = new Station('République', -9, 0, 0, 0xE55797, 2, '/cards/5.png')
-const chatelet = new Station('Châtelet', 0, 0, 0, 0xF9136E, 1.8, '/cards/6.png')
-const francoisMitterand = new Station('François Mitterand', 0, -5, 0, 0xFFA979, 1.6, '/cards/7.png')
-const defense = new Station('La Défense', -11, 7, 0, 0x37BBAB, 1.4, '/cards/8.png')
-const nation = new Station('Nation', -4, -3, 0, 0x1364DC, 1.2, '/cards/9.png')
+const gareDuNord = new Station('Gare du Nord', 1, 8, 0, 0xFF7425, 4, '/cards/0.png')
+const saintLazare = new Station('Saint-Lazare', -8, 5, 0, 0xFFAB2E, 3.6, '/cards/1.png')
+const gareDeLyon = new Station('Gare de Lyon', 5, -5, 0, 0xFFCF26, 2.8, '/cards/2.png')
+const montparnasse = new Station('Montparnasse', -6, -7, 0, 0xCD3EFF, 2.5, '/cards/3.png')
+const gareDeLest = new Station('Gare de l\'Est', 7, 6, 0, 0x7A4FF5, 1.6, '/cards/4.png')
+const republique = new Station('République', 7, 2, 0, 0xE55797, 1.5, '/cards/5.png')
+const chatelet = new Station('Châtelet', 0, 0, 0, 0xF9136E, 1.4, '/cards/6.png')
+const francoisMitterand = new Station('François Mitterand', 10, -11, 0, 0xFFA979, 1.3, '/cards/7.png')
+const defense = new Station('La Défense', -17, 6, 0, 0x37BBAB, 1.2, '/cards/8.png')
+const nation = new Station('Nation', 11, -2, 0, 0x1364DC, 0.4, '/cards/9.png')
 
 const stations = [gareDuNord, saintLazare, gareDeLyon, montparnasse, gareDeLest, republique, chatelet, francoisMitterand, defense, nation]
 console.log(stations);
@@ -265,6 +265,8 @@ scene.add( group );
 
 let targetQuaternion;
 let card = document.getElementById("card");
+let infoCard = document.querySelector(".info-card");
+console.log(infoCard);
 
 
 window.addEventListener('click', () =>
@@ -288,10 +290,13 @@ window.addEventListener('click', () =>
                 if(card.firstChild){
                     card.removeChild(card.firstChild);  
                 }
-                let img = document.createElement("img");
-                console.log(img);
-                img.src = stations[index].card;
-                card.appendChild(img);
+                window.setTimeout(() => {
+                    let img = document.createElement("img");
+                    card.appendChild(img);
+                    img.src = stations[index].card;
+                    card.style.opacity = 1;
+                    card.style.transform = "translate(40%, -50%)";
+                }, 500);
             }
         })
 
@@ -300,7 +305,9 @@ window.addEventListener('click', () =>
             corresp.material.opacity = 0.3
         })
 
-        gsap.to(camera.position, { duration: 1, delay: 0.5, x: currentIntersect.object.position.x + 4, y: currentIntersect.object.position.y, z: currentIntersect.object.position.z + 8 })
+        infoCard.style.opacity = 0;
+
+        gsap.to(camera.position, { duration: 1, delay: 0.5, x: currentIntersect.object.position.x + 4, y: currentIntersect.object.position.y, z: currentIntersect.object.position.z + 9 })
     }
     else // if we clicked on the background
     {
@@ -318,7 +325,14 @@ window.addEventListener('click', () =>
         })
 
         // remove previous card
-        card.removeChild(card.firstChild);
+        // card.firstChild.addEventListener('transitionend', destroyDOMNode, false);
+        // function destroyDOMNode(el){
+        //     el.target.parentNode.removeChild(e.target);
+        // }
+        card.style.opacity = 0;
+        card.style.transform = "translate(-40%, -50%)";
+        infoCard.style.opacity = 1;
+        // card.removeChild(card.firstChild);
     }
 })
 
@@ -387,11 +401,14 @@ scene.add(overlay)
 // scene.background = environmentMap
 // scene.environment = environmentMap
 //Load background texture
+
 const loader = new THREE.TextureLoader(loadingManager);
-loader.load('/textures/bg.jpg' , function(texture)
-{
-    scene.background = texture;  
-});
+loader.load('/textures/bg.jpg' , 
+// function(texture)
+// {
+//     scene.background = texture;  
+// }
+);
 
 
 debugObject.envMapIntensity = 2.5
@@ -417,49 +434,62 @@ debugObject.envMapIntensity = 2.5
 const raycaster = new Raycaster()
 const labels = [
     {
-        position: new THREE.Vector3(12, 6, 0),
+        position: new THREE.Vector3(-1, 10.6, 0),
         element: document.querySelector('.label-0')
     },
     {
-        position: new THREE.Vector3(9, -6, 0),
+        position: new THREE.Vector3(-10.8, 6, 0),
         element: document.querySelector('.label-1')
     },
     {
-        position: new THREE.Vector3(-7, 7, 0),
+        position: new THREE.Vector3(3.2, -4.2, 0),
         element: document.querySelector('.label-2')
     },
     {
-        position: new THREE.Vector3(1, 10, 0),
+        position: new THREE.Vector3(-8.6, -6.4, 0),
         element: document.querySelector('.label-3')
     },
     {
-        position: new THREE.Vector3(-8, -8, 0),
+        position: new THREE.Vector3(6.4, 8, 0),
         element: document.querySelector('.label-4')
     },
     {
-        position: new THREE.Vector3(-11, -1, 0),
+        position: new THREE.Vector3(5.8, 1.7, 0),
         element: document.querySelector('.label-5')
     },
     {
-        position: new THREE.Vector3(0,0, 0),
+        position: new THREE.Vector3(-4.6, -0.4, 0),
         element: document.querySelector('.label-6')
     },
     {
-        position: new THREE.Vector3(0, -6, 0),
+        position: new THREE.Vector3(3.9, -10.4, 0),
         element: document.querySelector('.label-7')
     },
     {
-        position: new THREE.Vector3(-6, -2, 0),
+        position: new THREE.Vector3(-18, 8.6, 0),
         element: document.querySelector('.label-8')
     },
     {
-        position: new THREE.Vector3(-11, 8, 0),
+        position: new THREE.Vector3(9.8, -2.4, 0),
         element: document.querySelector('.label-9')
     }
 ]
 
-// gui.add(labels[9].position, 'x').min(- 10).max(10).step(0.001)
-// gui.add(labels[9].position, 'y').min(- 10).max(10).step(0.001)
+gui.add(labels[4].position, 'x').min(- 15).max(15).step(0.1)
+gui.add(labels[4].position, 'y').min(- 15).max(15).step(0.1)
+
+gui.add(labels[6].position, 'x').min(- 15).max(15).step(0.1)
+gui.add(labels[6].position, 'y').min(- 15).max(15).step(0.1)
+
+gui.add(labels[7].position, 'x').min(- 15).max(15).step(0.1)
+gui.add(labels[7].position, 'y').min(- 15).max(15).step(0.1)
+
+gui.add(labels[8].position, 'x').min(- 15).max(15).step(0.1)
+gui.add(labels[8].position, 'y').min(- 15).max(15).step(0.1)
+
+gui.add(labels[9].position, 'x').min(- 15).max(15).step(0.1)
+gui.add(labels[9].position, 'y').min(- 15).max(15).step(0.1)
+
 
 
 /**

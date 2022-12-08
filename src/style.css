@@ -1,5 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai+Looped:wght@700&display=swap');
 
+@font-face {
+    font-family: 'misegar-regular';
+    src: url('/static/fonts/misegar.light.woff2') format('woff2'),
+        url('/static/fonts/misegar.light.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
 *
 {
     margin: 0;
@@ -28,11 +36,12 @@ body
     left: 0;
     width: 100%;
     height: 100%;
-    background: #000000;
+    background: #000;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    pointer-events: none;
     z-index: 100;
     opacity: 1;
     transition: opacity 1.5s;
@@ -88,13 +97,35 @@ body
     pointer-events: none;
 } */
 
+
+/* Informations */
+.info
+{
+    color: #fff;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin: 32px;
+    width: 26vw;
+}
+
+.info-card
+{
+    transition: all 1.5s ease-in-out;
+}
+
+.info h1
+{
+    font-size: 1.5rem;
+}
+
 .label
 {
     position: absolute;
     top: 50%;
     left: 50%;
-
-    background: #000;
+    background: #00000077;
+    backdrop-filter: blur(10px);
     border-radius: 48px;
     padding: 10px 20px;
     text-align: center;
@@ -151,14 +182,17 @@ body
     top: 50%;
     left: 50%;
     width: 25%;
-    transform: translateY(-50%);
+    transform: translate(-40%, -50%);
     backdrop-filter: blur(10px);
     border-radius: 34px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    pointer-events: none;   
     z-index: 100;
+    opacity: 0;
+    transition: all 1s ease-in-out;
 }
 
 #card img
