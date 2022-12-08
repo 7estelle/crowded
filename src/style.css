@@ -1,13 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai+Looped:wght@700&display=swap');
 
-@font-face {
-    font-family: 'misegar-regular';
-    src: url('/static/fonts/misegar.light.woff2') format('woff2'),
-        url('/static/fonts/misegar.light.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-
 *
 {
     margin: 0;
