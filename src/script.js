@@ -4,7 +4,13 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { gsap } from 'gsap'
 import { DepthFormat, Raycaster, Vector3 } from 'three'
+import GUI from 'lil-gui'
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 
+// Debug
+const gui = new GUI()
 
 /**
  * Sizes
@@ -41,6 +47,7 @@ window.addEventListener('resize', () =>
  */
 let sceneReady = false
 const loadingBarElement = document.querySelector('.loading-bar')
+const loadingPanelElement = document.querySelector('.loading-panel')
 
 const loadingManager = new THREE.LoadingManager(
     // Loaded
@@ -60,7 +67,7 @@ const loadingManager = new THREE.LoadingManager(
         window.setTimeout(() =>
         {
             sceneReady = true
-        }, 3000)
+        }, 2000)
     },
 
     // Progress
@@ -71,8 +78,8 @@ const loadingManager = new THREE.LoadingManager(
         loadingBarElement.style.transform = `scaleX(${progressRatio})`
     }
 )
-const gltfLoader = new GLTFLoader(loadingManager)
-const cubeTextureLoader = new THREE.CubeTextureLoader(loadingManager)
+// const gltfLoader = new GLTFLoader(loadingManager)
+// const cubeTextureLoader = new THREE.CubeTextureLoader(loadingManager)
 
 /**
  * Mouse
@@ -103,7 +110,7 @@ const scene = new THREE.Scene()
  */
 class Station{
 
-    constructor(name, x, y, z, color, scale)
+    constructor(name, x, y, z, color, scale, card)
     {
         this.name = name;
         this.x = x;
@@ -112,6 +119,7 @@ class Station{
         this.color = color;
         this.scene = scene;
         this.scale = scale;
+        this.card = card;
 
         this.setGeometry()
         this.setMaterial()
@@ -149,21 +157,21 @@ class Station{
 
 }
 
-const gareDuNord = new Station('Gare du Nord', 10, 3, 0, 0xFF7425, 3)
-const saintLazare = new Station('Saint-Lazare', 7, -6, 0, 0xFFAB2E, 2.8)
-const gareDeLyon = new Station('Gare de Lyon', -5, 4, 0, 0xFFCF26, 2.6)
-const montparnasse = new Station('Montparnasse', 3, 7, 0, 0xCD3EFF, 2.4)
-const gareDeLest = new Station('Gare de l\'Est', -6, -9, 0, 0x7A4FF5, 2.2)
-const republique = new Station('République', -9, 0, 0, 0xE55797, 2)
-const chatelet = new Station('Châtelet', 0, 0, 0, 0xF9136E, 1.8)
-const francoisMitterand = new Station('François Mitterand', 0, -5, 0, 0xFFA979, 1.6)
-const defense = new Station('La Défense', -11, 7, 0, 0x1364DC, 1.4)
-const nation = new Station('Nation', -4, -3, 0, 0x37BBAB, 1.2)
+const gareDuNord = new Station('Gare du Nord', 10, 3, 0, 0xFF7425, 3, '/cards/0.png')
+const saintLazare = new Station('Saint-Lazare', 7, -6, 0, 0xFFAB2E, 2.8, '/cards/1.png')
+const gareDeLyon = new Station('Gare de Lyon', -5, 4, 0, 0xFFCF26, 2.6, '/cards/2.png')
+const montparnasse = new Station('Montparnasse', 3, 7, 0, 0xCD3EFF, 2.4, '/cards/3.png')
+const gareDeLest = new Station('Gare de l\'Est', -6, -9, 0, 0x7A4FF5, 2.2, '/cards/4.png')
+const republique = new Station('République', -9, 0, 0, 0xE55797, 2, '/cards/5.png')
+const chatelet = new Station('Châtelet', 0, 0, 0, 0xF9136E, 1.8, '/cards/6.png')
+const francoisMitterand = new Station('François Mitterand', 0, -5, 0, 0xFFA979, 1.6, '/cards/7.png')
+const defense = new Station('La Défense', -11, 7, 0, 0x37BBAB, 1.4, '/cards/8.png')
+const nation = new Station('Nation', -4, -3, 0, 0x1364DC, 1.2, '/cards/9.png')
 
 const stations = [gareDuNord, saintLazare, gareDeLyon, montparnasse, gareDeLest, republique, chatelet, francoisMitterand, defense, nation]
-
+console.log(stations);
 const stationsParticles = stations.map(x => x.particles)
-
+console.log(stationsParticles);
 
 
 // Correspondances
@@ -300,6 +308,7 @@ window.addEventListener('click', () =>
             else
             {
                 currentIntersect.object.material.opacity = 1
+                // console.log(stations[particle.index].card);
             }
         })
 
@@ -380,19 +389,26 @@ scene.add(overlay)
 /**
  * Environment map
  */
-const environmentMap = cubeTextureLoader.load([
-    '/textures/environmentMaps/4/px.jpg',
-    '/textures/environmentMaps/4/nx.jpg',
-    '/textures/environmentMaps/4/py.jpg',
-    '/textures/environmentMaps/4/ny.jpg',
-    '/textures/environmentMaps/4/pz.jpg',
-    '/textures/environmentMaps/4/nz.jpg'
-])
+// const environmentMap = cubeTextureLoader.load([
+//     '/textures/environmentMaps/4/px.jpg',
+//     '/textures/environmentMaps/4/nx.jpg',
+//     '/textures/environmentMaps/4/py.jpg',
+//     '/textures/environmentMaps/4/ny.jpg',
+//     '/textures/environmentMaps/4/pz.jpg',
+//     '/textures/environmentMaps/4/nz.jpg'
+// ])
 
-environmentMap.encoding = THREE.sRGBEncoding
+// environmentMap.encoding = THREE.sRGBEncoding
 
-scene.background = environmentMap
-scene.environment = environmentMap
+// scene.background = environmentMap
+// scene.environment = environmentMap
+//Load background texture
+const loader = new THREE.TextureLoader(loadingManager);
+loader.load('/textures/bg.jpg' , function(texture)
+{
+    scene.background = texture;  
+});
+
 
 debugObject.envMapIntensity = 2.5
 
@@ -415,20 +431,52 @@ debugObject.envMapIntensity = 2.5
  * Points of interest
  */
 const raycaster = new Raycaster()
-const points = [
+const labels = [
     {
-        position: new THREE.Vector3(1.55, 0.3, -0.6),
-        element: document.querySelector('.point-0')
+        position: new THREE.Vector3(12, 6, 0),
+        element: document.querySelector('.label-0')
     },
     {
-        position: new THREE.Vector3(0.5, 0.8, -1.6),
-        element: document.querySelector('.point-1')
+        position: new THREE.Vector3(9, -6, 0),
+        element: document.querySelector('.label-1')
     },
     {
-        position: new THREE.Vector3(1.6, -1.3, -0.7),
-        element: document.querySelector('.point-2')
+        position: new THREE.Vector3(-7, 7, 0),
+        element: document.querySelector('.label-2')
+    },
+    {
+        position: new THREE.Vector3(1, 10, 0),
+        element: document.querySelector('.label-3')
+    },
+    {
+        position: new THREE.Vector3(-8, -8, 0),
+        element: document.querySelector('.label-4')
+    },
+    {
+        position: new THREE.Vector3(-11, -1, 0),
+        element: document.querySelector('.label-5')
+    },
+    {
+        position: new THREE.Vector3(0,0, 0),
+        element: document.querySelector('.label-6')
+    },
+    {
+        position: new THREE.Vector3(0, -6, 0),
+        element: document.querySelector('.label-7')
+    },
+    {
+        position: new THREE.Vector3(-6, -2, 0),
+        element: document.querySelector('.label-8')
+    },
+    {
+        position: new THREE.Vector3(-11, 8, 0),
+        element: document.querySelector('.label-9')
     }
 ]
+
+// gui.add(labels[9].position, 'x').min(- 10).max(10).step(0.001)
+// gui.add(labels[9].position, 'y').min(- 10).max(10).step(0.001)
+
 
 /**
  * Lights
@@ -445,43 +493,15 @@ const points = [
 
 const ambientLight = new THREE.AmbientLight('#b9d5ff', 0.12)
 scene.add(ambientLight)
-
-
-
-// scene.add(camera)
-
-
-//SPHERE NEW TEST
-// var particlesGeometry = new THREE.SphereGeometry(1,20,20);
-// var particlesMaterial = new THREE.PointsMaterial({
-//   color: 0x888888,
-//   size: 0.1,
-//   transparent: true
-// });
-// var particles = new THREE.Points(particlesGeometry, particlesMaterial);
-// scene.add(particles);
-
-
+scene.add(camera)
 
 // Controls
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
 controls.enabled = false
 
-// Helpers
-// const axesHelper = new THREE.AxesHelper( 5 );
-// scene.add( axesHelper );
-
 // MOUSE RAYCASTER
 const mouseRaycaster = new THREE.Raycaster()
-
-// Zoom sur une station au clic
-// window.addEventListener('click', () =>
-// {
-//     // controls.enabled = false
-//     // controls.target = new THREE.Vector3(7, 3, 4);
-//     gsap.to(camera.position, { duration: 1, delay: 0.5, x: 12, y: 6, z: 7 })
-// })
 
 /**
  * Renderer
@@ -500,6 +520,15 @@ renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
 
+// Neon effect
+const renderScene = new RenderPass( scene, camera );
+const composer = new EffectComposer( renderer );
+composer.addPass( renderScene );
+
+const bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1, 0.5, 0.1 );
+
+composer.addPass( bloomPass );
+
 /**
  * Animate
  */
@@ -516,45 +545,46 @@ const tick = () =>
     // Update controls
     // controls.update()
 
-    // if(sceneReady)
-    // {
-    //     // Go through each point
-    //     for(const point of points)
-    //     {
-    //         // Cloner les coordonnées initiales du point, sinon on va modifier les originales alors qu'on veut juste avoir leurs équivalents en coordonnées 2D
-    //         const screenPosition = point.position.clone()
-    //         screenPosition.project(camera)
+    if(sceneReady)
+    {
+        loadingPanelElement.style.opacity = 0
+        // Go through each point
+        for(const label of labels)
+        {
+            // Cloner les coordonnées initiales du point, sinon on va modifier les originales alors qu'on veut juste avoir leurs équivalents en coordonnées 2D
+            const screenPosition = label.position.clone()
+            screenPosition.project(camera)
 
-    //         raycaster.setFromCamera(screenPosition, camera)
-    //         const intersects = raycaster.intersectObjects(scene.children, true)
+            raycaster.setFromCamera(screenPosition, camera)
+            const intersects = raycaster.intersectObjects(scene.children, true)
 
-    //         if(intersects.length === 0)
-    //         {
-    //             point.element.classList.add('visible')
-    //         }
-    //         else
-    //         {
-    //             // La distance entre la caméra avec le raycaster et le point d'intersection de l'objet
-    //             const intersectionDistance = intersects[0].distance
-    //             const pointDistance = point.position.distanceTo(camera.position)
+            if(intersects.length === 0)
+            {
+                label.element.classList.add('visible')
+            }
+            else
+            {
+                // La distance entre la caméra avec le raycaster et le point d'intersection de l'objet
+                const intersectionDistance = intersects[0].distance
+                const labelDistance = label.position.distanceTo(camera.position)
 
-    //             if(intersectionDistance < pointDistance)
-    //             {
-    //                 point.element.classList.remove('visible')
-    //             }
-    //             else
-    //             {
-    //                 point.element.classList.add('visible')
+                if(intersectionDistance < labelDistance)
+                {
+                    label.element.classList.remove('visible')
+                }
+                else
+                {
+                    label.element.classList.add('visible')
 
-    //             }
-    //         }
+                }
+            }
 
-    //         const translateX = screenPosition.x * sizes.width * 0.5
-    //         const translateY = - screenPosition.y * sizes.height * 0.5
-    //         point.element.style.transform = `translate(${translateX}px, ${translateY}px)`
+            const translateX = screenPosition.x * sizes.width * 0.5 + mouse.x*20
+            const translateY = - screenPosition.y * sizes.height * 0.5 + mouse.y* 20
+            label.element.style.transform = `translate(${translateX}px, ${translateY}px)`
 
-    //     }
-    // }
+        }
+    }
 
     // LOOKAT QUATERNION
     if (targetQuaternion) {
@@ -566,24 +596,6 @@ const tick = () =>
     group.rotation.x = mouse.y *0.1
     // camera.position.x = mouse.x
     // camera.position.y = mouse.y
-
-    // SPHERE NEW TEST
-    // particles.rotation.x += 0.01;
-    // particles.rotation.y += 0.01;
-    // var h = ( 360 * ( 1.0 + elapsedTime * 0.0001 ) % 360 ) / 360;
-    // particlesMaterial.color.setHSL( h, 0.5, 0.5 );
-
-    // gareDuNord.y = Math.sin(elapsedTime * 0.3) * 1.5
-    // saintLazare.y = Math.sin(elapsedTime * 0.3) * 1.5
-    // gareDeLyon.y = Math.sin(elapsedTime * 0.3) * 1.5
-    // montparnasse.y = Math.sin(elapsedTime * 0.3) * 1.5
-    // gareDeLest.y = Math.sin(elapsedTime * 0.3) * 1.5
-    // republique.y = Math.sin(elapsedTime * 0.3) * 1.5
-    // chatelet.y = Math.sin(elapsedTime * 0.3) * 1.5
-    // francoisMitterand.y = Math.sin(elapsedTime * 0.3) * 1.5
-    // defense.y = Math.sin(elapsedTime * 0.3) * 1.5
-    // bastille.y = Math.sin(elapsedTime * 0.3) * 1.5
-
 
     // Mouse raycaster
     mouseRaycaster.setFromCamera(mouse, camera)
@@ -613,6 +625,8 @@ const tick = () =>
     }
     // Render
     renderer.render(scene, camera)
+    composer.render()
+
 
     // Call tick again on the next frame
     window.requestAnimationFrame(tick)
