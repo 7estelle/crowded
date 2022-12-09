@@ -20,6 +20,7 @@ body
     outline: none;
 }
 
+/* Loading */
 .loading-panel
 {
     position: absolute;
@@ -57,37 +58,6 @@ body
     transition: transform 1.5s ease-in-out;
 }
 
-/* .point:hover .text
-{
-    opacity: 1;
-} */
-
-/* .label.visible .label__name
-{
-    transform: scale(1, 1);
-} */
-
-/* .point .text
-{
-    position: absolute;
-    top: 30px;
-    left: -120px;
-    width: 200px;
-    padding: 20px;
-    border-radius: 4px;
-    background: #00000077;
-    border: 1px solid #ffffff77;
-    color: #ffffff;
-    line-height: 1.3em;
-    font-family: Helvetica, Arial, sans-serif;
-    text-align: center;
-    font-weight: 100;
-    font-size: 14px;
-    opacity: 0;
-    transition: opacity 0.5s;
-    pointer-events: none;
-} */
-
 /* Logo et noms */
 .logo
 {
@@ -98,7 +68,7 @@ body
 }
 .logo img
 {
-    width: 120px;
+    width: 140px;
 }
 .logo p
 {
@@ -145,18 +115,6 @@ body
     line-height: 1.2;
 }
 
-/* .info-card
-{
-    filter: drop-shadow(0 0 0.5rem rgb(102, 102, 102));
-    border: 1px solid #636363;
-    padding: 24px;
-    z-index: 100;
-    
-    backdrop-filter: blur(10px);
-    border-radius: 34px;
-    transition: all 1.5s ease-in-out;
-} */
-
 .info-text
 {
     font-weight: 400;
@@ -173,6 +131,8 @@ body
 {
     font-size: 1.5rem;
 }
+
+/* Label */
 
 .label
 {
@@ -237,13 +197,15 @@ body
     color: #37BBAB;
 }
 
+/* Cards */
+
 #card
 {
     position: absolute;
     top: 50%;
     left: 50%;
     width: 25%;
-    transform: translate(-40%, -50%);
+    transform: translate(-30%, -50%);
     backdrop-filter: blur(10px);
     border-radius: 34px;
     display: flex;

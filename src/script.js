@@ -8,9 +8,14 @@ import GUI from 'lil-gui'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+// import vertexShader from './vertex.glsl'
 
 // Debug
-const gui = new GUI()
+// const gui = new GUI()
+
+// Time
+const clock = new THREE.Clock()
+const elapsedTime = clock.getElapsedTime()
 
 /**
  * Sizes
@@ -156,6 +161,12 @@ class Station{
         this.scene.add(this.particles);
     }
 
+    // update = () =>
+    // {
+    //     this.particles.rotation.y = elapsedTime * 0.1
+    //     window.requestAnimationFrame(this.update)
+    // }
+
 }
 
 const gareDuNord = new Station('Gare du Nord', 1, 8, 0, 0xFF7425, 4, '/cards/0.png')
@@ -170,10 +181,7 @@ const defense = new Station('La Défense', -17, 6, 0, 0x37BBAB, 1.2, '/cards/8.p
 const nation = new Station('Nation', 11, -2, 0, 0x1364DC, 0.4, '/cards/9.png')
 
 const stations = [gareDuNord, saintLazare, gareDeLyon, montparnasse, gareDeLest, republique, chatelet, francoisMitterand, defense, nation]
-console.log(stations);
 const stationsParticles = stations.map(x => x.particles)
-console.log(stationsParticles);
-
 class Correspondance{
 
     constructor(start, end)
@@ -295,7 +303,7 @@ window.addEventListener('click', () =>
                     card.appendChild(img);
                     img.src = stations[index].card;
                     card.style.opacity = 1;
-                    card.style.transform = "translate(40%, -50%)";
+                    card.style.transform = "translate(30%, -50%)";
                 }, 500);
             }
         })
@@ -330,7 +338,7 @@ window.addEventListener('click', () =>
         //     el.target.parentNode.removeChild(e.target);
         // }
         card.style.opacity = 0;
-        card.style.transform = "translate(-40%, -50%)";
+        card.style.transform = "translate(-30%, -50%)";
         infoCard.style.opacity = 1;
         // card.removeChild(card.firstChild);
     }
@@ -462,7 +470,7 @@ const labels = [
         element: document.querySelector('.label-6')
     },
     {
-        position: new THREE.Vector3(3.9, -10.4, 0),
+        position: new THREE.Vector3(6.9, -9.7, 0),
         element: document.querySelector('.label-7')
     },
     {
@@ -474,22 +482,6 @@ const labels = [
         element: document.querySelector('.label-9')
     }
 ]
-
-gui.add(labels[4].position, 'x').min(- 15).max(15).step(0.1)
-gui.add(labels[4].position, 'y').min(- 15).max(15).step(0.1)
-
-gui.add(labels[6].position, 'x').min(- 15).max(15).step(0.1)
-gui.add(labels[6].position, 'y').min(- 15).max(15).step(0.1)
-
-gui.add(labels[7].position, 'x').min(- 15).max(15).step(0.1)
-gui.add(labels[7].position, 'y').min(- 15).max(15).step(0.1)
-
-gui.add(labels[8].position, 'x').min(- 15).max(15).step(0.1)
-gui.add(labels[8].position, 'y').min(- 15).max(15).step(0.1)
-
-gui.add(labels[9].position, 'x').min(- 15).max(15).step(0.1)
-gui.add(labels[9].position, 'y').min(- 15).max(15).step(0.1)
-
 
 
 /**
@@ -546,12 +538,10 @@ composer.addPass( bloomPass );
 /**
  * Animate
  */
-const clock = new THREE.Clock()
 let currentIntersect = null
 
 const tick = () =>
 {
-    const elapsedTime = clock.getElapsedTime()
 
     // Rotate all
     // group.rotation.y = elapsedTime * 0.1
