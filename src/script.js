@@ -121,6 +121,7 @@ class Station{
         this.scale = scale;
         this.card = card;
 
+
         this.setGeometry()
         this.setMaterial()
         this.setMesh()
@@ -265,8 +266,7 @@ scene.add( group );
 
 let targetQuaternion;
 let card = document.getElementById("card");
-let infoCard = document.querySelector(".info-card");
-console.log(infoCard);
+let infoCard = document.querySelector(".info");
 
 
 window.addEventListener('click', () =>

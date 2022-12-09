@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai+Looped:wght@700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai+Looped:wght@400;700&display=swap');
 *
 {
     margin: 0;
@@ -89,6 +88,35 @@ body
     pointer-events: none;
 } */
 
+/* Logo et noms */
+.logo
+{
+    position: absolute;
+    top: 32px;
+    left: 32px;
+    color: #fff;
+}
+.logo img
+{
+    width: 120px;
+}
+.logo p
+{
+    font-size: 0.6rem;
+    font-weight: 400;
+}
+
+.logo a
+{
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.5 ease-in-out;
+}
+
+.logo a:hover
+{
+    color: #FFA979;
+}
 
 /* Informations */
 .info
@@ -99,11 +127,46 @@ body
     left: 0;
     margin: 32px;
     width: 26vw;
+    min-width: 260px;
+    /* background: #00000077; */
+    filter: drop-shadow(0 0 0.5rem rgb(102, 102, 102));
+    border: 1px solid #636363;
+    padding: 24px;
+    z-index: 10;
+    
+    backdrop-filter: blur(10px);
+    border-radius: 34px;
+    transition: all 1.5s ease-in-out;
+
 }
 
-.info-card
+.info-title
 {
+    line-height: 1.2;
+}
+
+/* .info-card
+{
+    filter: drop-shadow(0 0 0.5rem rgb(102, 102, 102));
+    border: 1px solid #636363;
+    padding: 24px;
+    z-index: 100;
+    
+    backdrop-filter: blur(10px);
+    border-radius: 34px;
     transition: all 1.5s ease-in-out;
+} */
+
+.info-text
+{
+    font-weight: 400;
+    font-size: 0.8rem;
+    margin: 0.4rem 0;
+}
+
+.info-legend
+{
+    width: 46px;
 }
 
 .info h1
@@ -125,6 +188,12 @@ body
     text-transform: uppercase;
     white-space: nowrap;
     cursor: pointer;
+    transition: background 0.5s ease-in-out;
+}
+
+.label:hover
+{
+    background: #000000ee;
 }
 
 .label-0{
